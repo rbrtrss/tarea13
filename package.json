@@ -1,0 +1,44 @@
+{
+  "name": "tarea13",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "transpile": "babel src --out-dir dist",
+    "start": "node ./dist/index.js",
+    "dev": "nodemon --exec babel-node ./src/index.js",
+    "lint-fail": "eslint\"{src,apps,libs,tests}/**/*.js\"",
+    "lint-fix": "eslint\"{src,apps,libs,tests}/**/*.js\"--fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbrtrss/tarea13.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rbrtrss/tarea13/issues"
+  },
+  "homepage": "https://github.com/rbrtrss/tarea13#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.14.8",
+    "@babel/node": "^7.14.9",
+    "@babel/preset-env": "^7.14.9",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-prettier": "^3.4.0",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.3.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.3",
+    "moment": "^2.29.1",
+    "socket.io": "^4.1.3"
+  }
+}
