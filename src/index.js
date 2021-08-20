@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 /* eslint-disable import/extensions */
-import express from 'express';
+import express, { json } from 'express';
 import path from 'path';
 import handlebars from 'express-handlebars';
 import http from 'http';
+import fs from 'fs';
 import socketio from 'socket.io';
 import routerProductos from './routes/productos_routes.js';
 import productos from './models/productos.js';
@@ -48,19 +49,27 @@ app.use(
 
 app.use(routerProductos);
 
+// const persistencePath = path.resolve(
+//   __dirname,
+//   './persistence/mensajes-archivados.txt'
+// );
+
 io.on('connection', (socket) => {
   console.log(socket.id);
   socket.on('agregado-usuario', (u) => usuarios.addUsuario(socket.id, u));
-  // io.emit('atodos', productos.showProductos());
+
   socket.on('agregado-mensaje', (m) => {
     const usuario = usuarios.getUsuario(socket.id).email;
     const mensaje = formatoMensaje(usuario, m);
+    fs.appendFileSync(
+      './persistence/mensajes-archivados.txt',
+      JSON.stringify(mensaje)
+    );
     io.emit('procesado-mensaje', mensaje);
-    console.log(mensaje);
   });
+
   socket.on('agregado-producto', (p) => {
-    console.log('recimiendo de socket', socket.id);
-    productos.addProducto(p.title, p.price, p.thumbnail);
-    // io.emit('atodos', productos.showProductos());
+    const producto = productos.addProducto(p.title, p.price, p.thumbnail);
+    io.emit('procesado-producto', producto);
   });
 });

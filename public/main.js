@@ -1,58 +1,46 @@
 const socket = io();
 
-const renderLista = Handlebars.compile(
-  `<h3>Lista de Productos</h3>
-  {{#if productosExisten}}
-    <table class='table table-striped'>
-      <thead>
-        <tr>
-          <th>Producto</th>
-          <th>Precio</th>
-          <th></th>
-        </tr>
-      </thead>
-      {{#each productos}}
-        <tr>
-          <td>{{title}}</td>
-          <td>{{price}}</td>
-          <td><img width='50px' src='{{thumbnail}}' alt='' /></td>
-        </tr>
-      {{/each}}
-    </table>
-  {{else}}
-    <h4>{{error}}</h4>
-  {{/if}}`
-);
+const salidaProducto = (producto) => {
+  const tabla = document.querySelector('.producto');
+  const entrada = document.createElement('tr');
+  const title = document.createElement('td');
+  title.innerText = producto.title;
+  const price = document.createElement('td');
+  price.innerText = producto.price;
+  const thumbnail = document.createElement('td');
+  thumbnail.innerHTML = `<img width='50px' src='${producto.thumbnail}' alt='' />`;
+  entrada.appendChild(title);
+  entrada.appendChild(price);
+  entrada.appendChild(thumbnail);
+  tabla.appendChild(entrada);
+};
 
-const renderMensaje = Handlebars.compile(
-  `<div class="message">
-  <p class="meta">{{ususario}}</p>
-  <span>{{tiempo}}</span>
-  <p>{{contenido}}</p>
-</div>`
-);
-
-function salidaMensaje(mensaje) {
+const salidaMensaje = (mensaje) => {
   const div = document.createElement('div');
   div.classList.add('message');
   const p = document.createElement('p');
   p.classList.add('meta');
+  p.classList.add('emisor');
   p.innerText = mensaje.usuario;
-  p.innerHTML += `<span>${mensaje.tiempo}</span>`;
+  p.innerHTML += `<span class="tiempo"> ${mensaje.tiempo}</span>`;
   div.appendChild(p);
   const para = document.createElement('p');
   para.classList.add('text');
+  para.classList.add('mensaje');
   para.innerText = mensaje.contenido;
   div.appendChild(para);
   document.querySelector('.chat-messages').appendChild(div);
-}
+};
 
+// Atrapando las entradas sin generar el query que hace una nueva conexion
 document.getElementById('intro-usuario').addEventListener('submit', (e) => {
   e.preventDefault();
   const usuario = e.target.elements.username.value;
   socket.emit('agregado-usuario', usuario);
   e.target.elements.username.value = '';
   e.target.elements.username.focus();
+  e.target.className = 'd-none';
+  document.getElementById('chat-container').className = 'chat-container';
 });
 
 document.getElementById('intro-mensaje').addEventListener('submit', (e) => {
@@ -63,19 +51,33 @@ document.getElementById('intro-mensaje').addEventListener('submit', (e) => {
   e.target.elements.mensaje.focus();
 });
 
-const createProducto = () => {
+document.getElementById('intro-producto').addEventListener('submit', (e) => {
+  e.preventDefault();
   const producto = {
-    title: document.getElementById('title').value,
-    price: document.getElementById('price').value,
-    thumbnail: document.getElementById('thumbnail').value,
+    title: e.target.elements.title.value,
+    price: e.target.elements.price.value,
+    thumbnail: e.target.elements.thumbnail.value,
   };
   socket.emit('agregado-producto', producto);
-};
+  e.target.elements.title.value = '';
+  e.target.elements.price.value = '';
+  e.target.elements.thumbnail.value = '';
+  e.target.elements.title.focus();
+});
 
-socket.on('atodos', (datos) => {
-  const updateLista = renderLista(datos);
-  document.getElementById('lista-productos').innerHTML = updateLista;
-  // console.log(datos);
+// const createProducto = () => {
+//   const producto = {
+//     title: document.getElementById('title').value,
+//     price: document.getElementById('price').value,
+//     thumbnail: document.getElementById('thumbnail').value,
+//   };
+//   socket.emit('agregado-producto', producto);
+// };
+
+socket.on('procesado-producto', (producto) => {
+  salidaProducto(producto);
+  document.getElementById('sin-productos').className = 'd-none';
+  document.getElementById('lista-productos').className = 'default';
 });
 
 socket.on('procesado-mensaje', (mensaje) => {

@@ -1,3 +1,22 @@
-<div id='lista-productos'>
+<div id='sin-productos' class='default'>
+  <h4>Aun no hay productos</h4>
+</div>
 
+<div id='lista-productos' class='d-none'>
+  <h3>Lista de Productos</h3>
+  <table class='table table-striped'>
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Precio</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody class='table producto'></tbody>
+    {{! <tr> }}
+    {{!-- <td>{{title}}</td>
+      <td>{{price}}</td>
+      <td><img width='50px' src='{{thumbnail}}' alt='' /></td> --}}
+    {{! </tr> }}
+  </table>
 </div>

@@ -1,0 +1,14 @@
+.emisor {
+  color: blue;
+  font-weight: bold;
+}
+
+.tiempo {
+  color: brown;
+  font-weight: normal;
+}
+
+.mensaje {
+  color: green;
+  font-style: italic;
+}

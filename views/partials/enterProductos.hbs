@@ -1,5 +1,5 @@
 <h3>Introducir Características del Producto</h3>
-<form id='form-producto' onsubmit="return false">
+<form id='intro-producto' onsubmit="return false">
   <div class='form-group'>
     <label for='title'>Nombre del Producto</label>
     <input type='text' id='title' name='title' class='form-control' />
@@ -8,7 +8,7 @@
     <label for='thumbnail'>URL de Imagen del Producto</label>
     <input type='url' id='thumbnail' name='thumbnail' class='form-control' />
     <input
-      onclick='createProducto()'
+      {{!-- onclick='createProducto()' --}}
       type='submit'
       class='btn btn-primary'
       value="Guardar Producto"
